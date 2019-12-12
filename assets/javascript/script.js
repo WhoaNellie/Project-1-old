@@ -73,6 +73,9 @@ $("#newCard").on("click", function(){
     cardNum++;
 });
 
+// add event listener for enter
 
+// add stuff to local storage
+    // array of cards with text and progress saved
 
 });
