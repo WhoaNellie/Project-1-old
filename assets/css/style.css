@@ -4,13 +4,9 @@
     box-sizing: border-box;
 }
 
-/*
- * -- BASE STYLES --
- * Most of these are inherited from Base, but I want to change a few.
- */
 body {
     line-height: 1.7em;
-    color: #7f8c8d;
+    background-image: url(../images/cork-board/cork-board.png);
     font-size: 13px;
 }
 
@@ -132,7 +128,7 @@ a.pure-button-primary {
  */
 
 .splash-container {
-    background: #1f8dd6;
+    background-image: url(../images/cork-board/cork-board.png);
     z-index: 1;
     overflow: hidden;
     /* The following styles are required for the "scroll-over" effect */
