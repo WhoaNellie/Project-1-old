@@ -15,6 +15,15 @@ body {
 h1 {
     color: white;
     text-align: center;
+    text-shadow: 1px 1px 1px black;
+}
+
+p {
+    color: white;
+    text-align: center;
+    font: bold;
+    font-size: large;
+    text-shadow: 1px 1px 1px black;
 }
 h2,
 h3,
