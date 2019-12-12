@@ -166,6 +166,7 @@ a.pure-button-primary {
 .splash-subhead {
     color: white;
     letter-spacing: 0.05em;
+    font-size: 2em;
     opacity: 0.8;
 }
 
@@ -222,6 +223,7 @@ a.pure-button-primary {
     position: fixed;
     bottom: 0;
     width: 100%;
+    color: white;
 }
 
 /*
