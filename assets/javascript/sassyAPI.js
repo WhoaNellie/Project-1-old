@@ -1,28 +1,36 @@
-let button = $("<input>"); 
+//Run this when page loads
+$(document).ready(function () {
+    console.log("hi");
+//Populate random gif when radio button "done" selected
+    $("#complete").on("click", function () {
 
-button.on("click", function() {
-    if ($(this).attr("value") == "done"){
+        let queryURL = "https://api.giphy.com/v1/gifs/random?tag=" +
+            "congrats" + "&api_key=lJvM8CYrpxziVxv5vy11SIH5QRxU7OU8" + "&limit=1";
 
-        let queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
-        "yay" + "&api_key=dc6zaTOxFJmzC&limit=10" + "&limit=1";
-  
-      $.ajax({
-        url: queryURL,
-        method: "GET"
-      })
-        .then(function(response) {
-          console.log(response);
-            let gifDiv = $("<div>");
-            let positiveImage = $("<img>");
-            
-            positiveImage.attr("src", results[i].images.fixed_height.url);
-  
-            gifDiv.prepend(positiveImage);
-  
-            $("#gifs-go-here").prepend(gifDiv);
-          
+        $.ajax({
+            url: queryURL,
+            method: "GET"
+        }).then(function (response) {
+            console.log(response);
+            let results = response.data; 
+            console.log(results.length);
+            //for (let i=0; i < results.length; i++){
+
+                let gifDiv = $("<div>");
+                let positiveImage = $("<img>");  
+                
+                positiveImage.attr("src", response.data.images.original.url);
+                console.log(response.data.url);
+    
+                gifDiv.prepend(positiveImage);
+    
+                $("#gifs-go-here").prepend(gifDiv);
+
+           //}
+           
+
         });
 
-    };
-
+    });
 });
+
