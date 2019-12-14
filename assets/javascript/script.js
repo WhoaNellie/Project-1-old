@@ -1,81 +1,134 @@
-$(document).ready(function(){
+$(document).ready(function () {
 
-// adding event listener to button to make new kanban cards
-let cardNum = 0; // keeping track of the number of kanban cards
-$("#newCard").on("click", function(){
+    // pull cardnum from local storage
+    // keeping track of the number of kanban cards
+    let cardNum;
+    if(localStorage.getItem("cardNum")){
+        cardNum = localStorage.getItem("cardNum");
+        console.log("nums in storage");
+    }else{
+        cardNum = 0;
+    }
 
-    // adding class for styling
-    let card = $("<div>").attr({
-        class : "card"
-    });
+    let taskArr = [];
+    if(localStorage.getItem("taskArr")){
+        taskArr = JSON.parse(localStorage.getItem("taskArr"));
+        console.log("tasks in storage");
+    }
 
-    //input for adding text to note, data attr for local storage
-    let input = $("<input>").attr({
-        type : "text",
-        "data-num" : cardNum
-    });
+    // adding event listener to button to make new kanban card
+    $("#newCard").on("click", genCards);
 
-    // making radio buttons for task state
+    // event listener for changes in card text
+    $(document).on("blur",".task", saveTask);
 
-    // div to add radio buttons for organization
-    let radioDiv = $("<div>");
+    // event listener for changes in card state
+    $(document).on("click", ".state", saveState)
 
-    let toDo = $("<input>").attr({
-        type : "radio",
-        name : "progress",
-        value : "toDo",
-        "data-id" : "toDo" + cardNum
-    });
+    function genCards(cardObj) {
+        // adding class for styling
+        let card = $("<div>").attr({
+            class: "card",
+            "data-id" : cardNum
+        });
+
+        //input for adding text to note, data attr for local storage
+        // make enter when focused blur
+        let input = $("<input>").attr({
+            type: "text",
+            class : "task",
+            "data-id": cardNum
+        });
+
+        // making radio buttons for task state
+
+        // div to add radio buttons for organization
+        let radioDiv = $("<div>");
+
+        let toDo = $("<input>").attr({
+            type: "radio",
+            name: "progress",
+            value: "toDo",
+            class : "state",
+            "data-id": "toDo" + cardNum
+        });
 
         // adding labels to buttons
+            // need to link labels to radio buttons using IDs, find way to integrate with giphy call by ID
         let toDoLabel = $("<label>").attr({
-            for : "toDo" + cardNum
+            for: "toDo" + cardNum,
+            class : "state"
         })
         toDoLabel.text("To Do");
 
-    let inProg = $("<input>").attr({
-        type : "radio",
-        name : "progress",
-        value : "inProg",
-        "data-id" : "inProg" + cardNum
-    });
+        let inProg = $("<input>").attr({
+            type: "radio",
+            name: "progress",
+            value: "inProg",
+            class : "state",
+            "data-id": "inProg" + cardNum
+        });
 
         let inProgLabel = $("<label>").attr({
-            for : "toDo" + cardNum
+            for: "toDo" + cardNum,
+            class : "state"
         })
         inProgLabel.text("In Progress");
 
-    let done = $("<input>").attr({
-        type : "radio",
-        name : "progress",
-        value : "done",
-        "data-id" : "done" + cardNum
-    });
+        let done = $("<input>").attr({
+            type: "radio",
+            name: "progress",
+            value: "done",
+            class : "state",
+            "data-id": "done" + cardNum
+        });
 
         let doneLabel = $("<label>").attr({
-            for : "done" + cardNum
-        })
+            for: "done" + cardNum,
+            class : "state"
+        });
         doneLabel.text("Done");
 
-    // appending everything
+        // appending everything
 
-    card.append(radioDiv);
-    card.append(input);
+        card.append(radioDiv);
+        card.append(input);
 
-    radioDiv.append(toDo);
+        radioDiv.append(toDo);
         radioDiv.append(toDoLabel);
-    radioDiv.append(inProg);
+        radioDiv.append(inProg);
         radioDiv.append(inProgLabel);
-    radioDiv.append(done);
+        radioDiv.append(done);
         radioDiv.append(doneLabel);
 
-    $("#cards").append(card);
-    cardNum++;
-});
+        $("#cards").append(card);
 
-// add event listener for enter
+        
+        cardNum++;
+        localStorage.setItem("cardNum", cardNum);
 
-// add stuff to local storage
+    }
+
+
+    // add event listener for enter
+
+    // add stuff to local storage
     // array of cards with text and progress saved
+
+
+    function saveTask(){
+        console.log("save task");
+        console.log($(this).val());
+        console.log($(this).parent().attr("data-id"));
+
+        taskArr[$(this).parent().attr("data-id")] = $(this).val();
+
+        localstorage.setItem("tasks", JSON.stringify(taskArr));
+
+    }
+
+    function saveState(){
+        console.log("save state");
+    }
 
 });
