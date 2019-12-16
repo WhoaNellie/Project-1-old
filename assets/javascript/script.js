@@ -17,8 +17,17 @@ $(document).ready(function () {
         console.log("tasks in storage");
     }else{
         taskArr = [];
-        console.l
     }
+
+    let stateArr;
+    if(localStorage.getItem("states")){
+        stateArr = JSON.parse(localStorage.getItem("states"));
+        console.log(stateArr);
+        console.log("states in storage");
+    }else{
+        stateArr = [];
+    }
+
 
     // adding event listener to button to make new kanban card
     $("#newCard").on("click", genCards);
@@ -55,15 +64,16 @@ $(document).ready(function () {
             name: "progress",
             value: "toDo",
             class : "state",
-            "data-id": "toDo" + cardNum
+            id : "toDo" + cardNum
         });
 
         // adding labels to buttons
             // need to link labels to radio buttons using IDs, find way to integrate with giphy call by ID
         let toDoLabel = $("<label>").attr({
             for: "toDo" + cardNum,
-            class : "state"
-        })
+            class : "state",
+            "data-value" : "toDo"
+        });
         toDoLabel.text("To Do");
 
         let inProg = $("<input>").attr({
@@ -71,13 +81,14 @@ $(document).ready(function () {
             name: "progress",
             value: "inProg",
             class : "state",
-            "data-id": "inProg" + cardNum
+            id: "inProg" + cardNum
         });
 
         let inProgLabel = $("<label>").attr({
-            for: "toDo" + cardNum,
-            class : "state"
-        })
+            for: "inProg" + cardNum,
+            class : "state",
+            "data-value" : "inProg"
+        });
         inProgLabel.text("In Progress");
 
         let done = $("<input>").attr({
@@ -85,12 +96,13 @@ $(document).ready(function () {
             name: "progress",
             value: "done",
             class : "state",
-            "data-id": "done" + cardNum
+            id : "done" + cardNum
         });
 
         let doneLabel = $("<label>").attr({
             for: "done" + cardNum,
-            class : "state"
+            class : "state",
+            "data-value" : "done"
         });
         doneLabel.text("Done");
 
@@ -133,8 +145,6 @@ $(document).ready(function () {
             taskArr[$(this).attr("data-id")] = $(this).val();
         }
 
-        
-
         localStorage.setItem("tasks", JSON.stringify(taskArr));
 
     }
@@ -142,6 +152,15 @@ $(document).ready(function () {
     function saveState(){
         console.log("save state");
         console.log($(this).attr("value"));
+        console.log($(this).parent().parent().attr("data-id"));
+
+        if($(this).parent().parent().attr("data-id") == cardNum){
+            stateArr.push($(this).attr("value"));
+        }else{
+            stateArr[$(this).parent().attr("data-id")] = $(this).attr("value");
+        }
+
+        localStorage.setItem("states", JSON.stringify(stateArr));
     }
 
 });
