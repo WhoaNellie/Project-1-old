@@ -35,10 +35,9 @@ $(document).ready(function () {
     // event listener for changes in card text
     $(document).on("blur",".task", saveTask);
 
+        //enter causes blur
         $(document).on("keypress", ".task", function(event){
-            console.log("keypress");
             if(event.which == 13){
-                console.log("enter");
                 $(this).blur();
             }
         })
@@ -47,7 +46,7 @@ $(document).ready(function () {
     $(document).on("click", ".state", saveState)
 
     function genCards(cardObj) {
-        cardNum++;
+        
         // adding class for styling
         let card = $("<div>").attr({
             class: "card",
@@ -77,6 +76,7 @@ $(document).ready(function () {
 
         // adding labels to buttons
             // need to link labels to radio buttons using IDs, find way to integrate with giphy call by ID
+                //use classes
         let toDoLabel = $("<label>").attr({
             for: "toDo" + cardNum,
             class : "state",
@@ -128,31 +128,24 @@ $(document).ready(function () {
 
         $("#cards").append(card);
 
-        
+        cardNum++;
         localStorage.setItem("cardNum", cardNum);
+        
 
     }
 
-
-    // add event listener for enter
-
-    // add stuff to local storage
-    // array of cards with text and progress saved
-
-
     // !!! changes on most recent card will just push a new object instead of editing the correct slot
 
-    // deleted old array items when new item added
     function saveTask(){
         console.log("save task");
         console.log($(this).val());
         console.log($(this).attr("data-id"));
 
         // pushing a new index/value if this is a new card, else updating the old card's value
-        if(taskArr.length <= $(this).attr("data-id")){
-            taskArr.push($(this).val());
-        }else{
+        if(taskArr[$(this).attr("data-id")]){
             taskArr[$(this).attr("data-id")] = $(this).val();
+        }else{
+            taskArr.push($(this).val());
         }
 
         localStorage.setItem("tasks", JSON.stringify(taskArr));
