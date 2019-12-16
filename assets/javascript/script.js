@@ -10,10 +10,14 @@ $(document).ready(function () {
         cardNum = 0;
     }
 
-    let taskArr = [];
-    if(localStorage.getItem("taskArr")){
-        taskArr = JSON.parse(localStorage.getItem("taskArr"));
+    let taskArr;
+    if(localStorage.getItem("tasks")){
+        taskArr = JSON.parse(localStorage.getItem("tasks"));
+        console.log(taskArr);
         console.log("tasks in storage");
+    }else{
+        taskArr = [];
+        console.l
     }
 
     // adding event listener to button to make new kanban card
@@ -26,6 +30,7 @@ $(document).ready(function () {
     $(document).on("click", ".state", saveState)
 
     function genCards(cardObj) {
+        cardNum++;
         // adding class for styling
         let card = $("<div>").attr({
             class: "card",
@@ -104,7 +109,6 @@ $(document).ready(function () {
         $("#cards").append(card);
 
         
-        cardNum++;
         localStorage.setItem("cardNum", cardNum);
 
     }
@@ -116,19 +120,28 @@ $(document).ready(function () {
     // array of cards with text and progress saved
 
 
+    // deleted old array items when new item added
     function saveTask(){
         console.log("save task");
         console.log($(this).val());
-        console.log($(this).parent().attr("data-id"));
+        console.log($(this).attr("data-id"));
 
-        taskArr[$(this).parent().attr("data-id")] = $(this).val();
+        // pushing a new index/value if this is a new card, else updating the old card's value
+        if($(this).attr("data-id") == cardNum){
+            taskArr.push($(this).val());
+        }else{
+            taskArr[$(this).attr("data-id")] = $(this).val();
+        }
 
-        localstorage.setItem("tasks", JSON.stringify(taskArr));
+        
+
+        localStorage.setItem("tasks", JSON.stringify(taskArr));
 
     }
 
     function saveState(){
         console.log("save state");
+        console.log($(this).attr("value"));
     }
 
 });
