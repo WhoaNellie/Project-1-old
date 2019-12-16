@@ -35,6 +35,14 @@ $(document).ready(function () {
     // event listener for changes in card text
     $(document).on("blur",".task", saveTask);
 
+        $(document).on("keypress", ".task", function(event){
+            console.log("keypress");
+            if(event.which == 13){
+                console.log("enter");
+                $(this).blur();
+            }
+        })
+
     // event listener for changes in card state
     $(document).on("click", ".state", saveState)
 
@@ -132,6 +140,8 @@ $(document).ready(function () {
     // array of cards with text and progress saved
 
 
+    // !!! changes on most recent card will just push a new object instead of editing the correct slot
+
     // deleted old array items when new item added
     function saveTask(){
         console.log("save task");
@@ -139,7 +149,7 @@ $(document).ready(function () {
         console.log($(this).attr("data-id"));
 
         // pushing a new index/value if this is a new card, else updating the old card's value
-        if($(this).attr("data-id") == cardNum){
+        if(taskArr.length <= $(this).attr("data-id")){
             taskArr.push($(this).val());
         }else{
             taskArr[$(this).attr("data-id")] = $(this).val();
