@@ -64,12 +64,10 @@ $(document).ready(function () {
         }
     });
 
-    // $(window).on('beforeunload', $(".task").blur());
+    // make cards save before page refresh
 
     // event listener for changes in card state
-    $(document).on("click", ".state", function(){
-        // saveState();
-    });
+    $(document).on("click", ".state", changeState);
 
     function genCards(cardState, num) {
         console.log(cardState + num);
@@ -86,14 +84,11 @@ $(document).ready(function () {
             type: "text",
             class: "task",
             "data-id": num
-        });;
+        });
 
         if (taskArr[num]) {
             input.attr("value", taskArr[num]);
         }
-
-        // making radio buttons for task state
-        // !!! radio buttons not linking to specific card?
 
         let toDo;
         let inProg;
@@ -189,7 +184,7 @@ $(document).ready(function () {
 
     }
 
-    function saveState() {
+    function changeState() {
         console.log("save state");
         console.log($(this).prop("nodeName"));
         console.log($(this).parent().parent().attr("data-id"));
