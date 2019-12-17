@@ -2,226 +2,186 @@ $(document).ready(function () {
 
     // checking for values in local storage and initializing if none
     let cardNum;
-    if(localStorage.getItem("cardNum")){
+    if (localStorage.getItem("cardNum")) {
         cardNum = localStorage.getItem("cardNum");
         console.log("nums in storage");
-    }else{
+    } else {
         cardNum = 0;
     }
 
     let taskArr;
-    if(localStorage.getItem("tasks")){
+    if (localStorage.getItem("tasks")) {
         taskArr = JSON.parse(localStorage.getItem("tasks"));
         console.log(taskArr);
         console.log("tasks in storage");
-    }else{
+    } else {
         taskArr = [];
     }
 
     let stateArr;
-    if(localStorage.getItem("states")){
+    if (localStorage.getItem("states")) {
         stateArr = JSON.parse(localStorage.getItem("states"));
         console.log(stateArr);
         console.log("states in storage");
-    }else{
+    } else {
         stateArr = [];
     }
 
     //populates previously made cards
-    if(stateArr.length > 0){
-        for(let i = 1; i < stateArr.length + 1;i++){
+    if (stateArr.length > 0 || taskArr.length) {
+        console.log("old cards");
+        for (let i = 0; i < stateArr.length; i++) {
             genCards(stateArr[i], i);
         }
     }
 
     // adding event listener to button to make new kanban card
-    $(document).on("click", ".newCard", function(){
+    $(document).on("click", ".newCard", function () {
         genCards($(this).attr("data-state"), cardNum);
+        console.log($(this).attr("data-state"));
+
+        // not DRY but whatever
+        if (stateArr[cardNum]) {
+            stateArr[cardNum] = $(this).attr("data-state");
+        } else {
+            stateArr.push($(this).attr("data-state"));
+        }
+
+        localStorage.setItem("states", JSON.stringify(stateArr));
+
         cardNum++;
         localStorage.setItem("cardNum", cardNum);
     });
 
     // event listener for changes in card text
-    $(document).on("blur",".task", saveTask);
+    $(document).on("blur", ".task", saveTask);
 
-        //enter causes blur
-        $(document).on("keypress", ".task", function(event){
-            if(event.which == 13){
-                $(this).blur();
-            }
-        })
+    //enter causes blur
+    $(document).on("keypress", ".task", function(event){
+        if(event.which == 13){
+            $(this).blur();
+            saveTask();
+        }
+    });
+
+    // $(window).on('beforeunload', $(".task").blur());
 
     // event listener for changes in card state
-    $(document).on("click", ".state", saveState);
+    $(document).on("click", ".state", function(){
+        // saveState();
+    });
 
     function genCards(cardState, num) {
-        
+        console.log(cardState + num);
+
+        stateArr[num] = cardState;
         // adding class for styling
         let card = $("<div>").attr({
             class: "card",
-            "data-id" : cardNum
+            "data-id": num
         });
 
         //input for adding text to note, data attr for local storage
         let input = $("<input>").attr({
             type: "text",
-            class : "task",
-            "data-id": cardNum
+            class: "task",
+            "data-id": num
         });;
 
-        if(taskArr[num]){
-            input.val(taskArr[num]);
+        if (taskArr[num]) {
+            input.attr("value", taskArr[num]);
         }
 
         // making radio buttons for task state
-            // !!! radio buttons not linking to specific card?
+        // !!! radio buttons not linking to specific card?
 
         let toDo;
-        let toDoLabel;
-
         let inProg;
-        let inProgLabel;
-
         let done;
-        let doneLabel;
 
-        let radioDiv = $("<div>");
+        let stateDiv = $("<div>");
 
-        if(cardState == "toDo"){
+        if (cardState == "toDo") {
 
-            inProg = $("<input>").attr({
-                type: "radio",
-                name: "progress",
-                value: "inProg",
-                class : "state",
-                id: "inProg" + cardNum
+            inProg = $("<button>").attr({
+                class: "state",
+                id: "inProg" + num
             });
-    
-                inProgLabel = $("<label>").attr({
-                    for: "inProg" + cardNum,
-                    "data-value" : "inProg"
-                });
-                inProgLabel.text("In Progress");
 
-            radioDiv.append(inProg);
-            radioDiv.append(inProgLabel);
+            stateDiv.append(inProg);
 
-            done = $("<input>").attr({
-                type: "radio",
-                name: "progress",
-                value: "done",
-                class : "state",
-                id : "done" + cardNum
+            done = $("<button>").attr({
+                class: "state",
+                id: "done" + num
             });
-    
-                doneLabel = $("<label>").attr({
-                    for: "done" + cardNum,
-                    "data-value" : "done"
-                });
-                doneLabel.text("Done");
 
-            radioDiv.append(done);
-            radioDiv.append(doneLabel);
+            stateDiv.append(done);
 
             $(".toDo").append(card);
 
-        }else if(cardState == "inProg"){
-            toDo = $("<input>").attr({
-                type: "radio",
-                name: "progress",
-                value: "toDo",
-                class : "state",
-                id : "toDo" + cardNum
+            inProg.text("In Progress");
+            done.text("Done");
+
+        } else if (cardState == "inProg") {
+            toDo = $("<button>").attr({
+                class: "state",
+                id: "toDo" + num
             });
-    
-                toDoLabel = $("<label>").attr({
-                    for: "toDo" + cardNum,
-                    "data-value" : "toDo"
-                });
-                toDoLabel.text("To Do");   
 
-            radioDiv.append(toDo);
-            radioDiv.append(toDoLabel); 
+            stateDiv.append(toDo);
 
-            done = $("<input>").attr({
-                type: "radio",
-                name: "progress",
-                value: "done",
-                class : "state",
-                id : "done" + cardNum
+            done = $("<button>").attr({
+                class: "state",
+                id: "done" + num
             });
-    
-                doneLabel = $("<label>").attr({
-                    for: "done" + cardNum,
-                    "data-value" : "done"
-                });
-                doneLabel.text("Done");
 
-            radioDiv.append(done);
-            radioDiv.append(doneLabel);
+            stateDiv.append(done);
 
             $(".inProg").append(card);
 
-        }else if(cardState == "done"){
-            toDo = $("<input>").attr({
-                type: "radio",
-                name: "progress",
-                value: "toDo",
-                class : "state",
-                id : "toDo" + cardNum
-            });
-    
-                toDoLabel = $("<label>").attr({
-                    for: "toDo" + cardNum,
-                    "data-value" : "toDo"
-                });
-                toDoLabel.text("To Do");
-            
-            radioDiv.append(toDo);
-            radioDiv.append(toDoLabel);
-    
+            toDo.text("To Do");
+            done.text("Done");
 
-            inProg = $("<input>").attr({
-                type: "radio",
-                name: "progress",
-                value: "inProg",
-                class : "state",
-                id: "inProg" + cardNum
-            });
-    
-                inProgLabel = $("<label>").attr({
-                    for: "inProg" + cardNum,
-                    "data-value" : "inProg"
-                });
-                inProgLabel.text("In Progress");
+        } else if (cardState == "done") {
+            toDo = $("<button>").attr({
 
-            radioDiv.append(inProg);
-            radioDiv.append(inProgLabel);
+                class: "state",
+                id: "toDo" + num
+            });
+
+            stateDiv.append(toDo);
+
+            inProg = $("<button>").attr({
+                class: "state",
+                id: "inProg" + num
+            });
+
+            stateDiv.append(inProg);
 
             $(".done").append(card);
-        }else{
+
+            toDo.text("To Do");
+            inProg.text("In Progress");
+        } else {
             console.log("whoops");
         }
 
-        // div to add radio buttons for organization
-
-
-        card.append(radioDiv);
+        card.append(stateDiv);
         card.append(input);
-        
+
 
     }
 
 
-    function saveTask(){
+    function saveTask() {
         console.log("save task");
         console.log($(this).val());
         console.log($(this).attr("data-id"));
 
         // pushing a new index/value if this is a new card, else updating the old card's value
-        if(taskArr[$(this).attr("data-id")]){
+        if (taskArr[$(this).attr("data-id")]) {
             taskArr[$(this).attr("data-id")] = $(this).val();
-        }else{
+        } else {
             taskArr.push($(this).val());
         }
 
@@ -229,16 +189,16 @@ $(document).ready(function () {
 
     }
 
-    function saveState(){
+    function saveState() {
         console.log("save state");
         console.log($(this).prop("nodeName"));
         console.log($(this).parent().parent().attr("data-id"));
 
         $(this).parent().parent().attr("state", $(this).attr("value"));
 
-        if(stateArr[$(this).parent().parent().attr("data-id")]){
+        if (stateArr[$(this).parent().parent().attr("data-id")]) {
             stateArr[$(this).parent().parent().attr("data-id")] = $(this).attr("value");
-        }else{
+        } else {
             stateArr.push($(this).attr("value"));
         }
 
