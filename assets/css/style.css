@@ -363,16 +363,10 @@ a.pure-button-primary {
         text-align: left;
         width: 100%;
         box-sizing: border-box;
-        white-space: normal;
-    }
-
-    .home-menu {
-        white-space: normal !important;
     }
 
     .home-menu .pure-menu-heading {
         font-size: 1.25em;
-        display: block;
     }
     .home-menu ul {
         float: right;
