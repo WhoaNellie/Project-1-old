@@ -79,7 +79,7 @@ $(document).ready(function () {
                 //use classes
         let toDoLabel = $("<label>").attr({
             for: "toDo" + cardNum,
-            class : "state",
+            // class : "state",
             "data-value" : "toDo"
         });
         toDoLabel.text("To Do");
@@ -94,7 +94,7 @@ $(document).ready(function () {
 
         let inProgLabel = $("<label>").attr({
             for: "inProg" + cardNum,
-            class : "state",
+            // class : "state",
             "data-value" : "inProg"
         });
         inProgLabel.text("In Progress");
@@ -109,7 +109,7 @@ $(document).ready(function () {
 
         let doneLabel = $("<label>").attr({
             for: "done" + cardNum,
-            class : "state",
+            // class : "state",
             "data-value" : "done"
         });
         doneLabel.text("Done");
@@ -154,13 +154,14 @@ $(document).ready(function () {
 
     function saveState(){
         console.log("save state");
-        console.log($(this).attr("value"));
+        console.log($(this).prop("nodeName"));
         console.log($(this).parent().parent().attr("data-id"));
 
-        if($(this).parent().parent().attr("data-id") == cardNum){
-            stateArr.push($(this).attr("value"));
+
+        if(stateArr[$(this).parent().parent().attr("data-id")]){
+            stateArr[$(this).parent().parent().attr("data-id")] = $(this).attr("value");
         }else{
-            stateArr[$(this).parent().attr("data-id")] = $(this).attr("value");
+            stateArr.push($(this).attr("value"));
         }
 
         localStorage.setItem("states", JSON.stringify(stateArr));
