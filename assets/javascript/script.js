@@ -92,7 +92,7 @@ $(document).ready(function () {
 
         let toDo;
         let inProg;
-        let done;
+        let done = null;
 
         let stateDiv = $("<div>");
 
@@ -159,6 +159,29 @@ $(document).ready(function () {
             inProg.text("In Progress");
         } else {
             console.log("whoops");
+        }
+
+        if(done != null){
+            done.on("click", function () {
+    
+                let queryURL = "https://api.giphy.com/v1/gifs/random?tag=" +
+                    "congrats" + "&api_key=lJvM8CYrpxziVxv5vy11SIH5QRxU7OU8" + "&limit=1";
+        
+                $.ajax({
+                    url: queryURL,
+                    method: "GET"
+                }).then(function (response) {
+                    console.log(response);
+                    let results = response.data; 
+                    console.log(results.length);
+                    $("#modal-1").attr("checked",true);
+                        
+                        $("#new-modal").attr("src", response.data.images.original.url);
+                        console.log(response.data.url);
+        
+                });
+        
+            });
         }
 
         card.append(stateDiv);
