@@ -67,20 +67,10 @@ $("#newCard").on("click", function(){
             console.log(response);
             let results = response.data; 
             console.log(results.length);
-            //for (let i=0; i < results.length; i++){
-
-                let gifDiv = $("<div>");
-                let positiveImage = $("<img>");
-    
+            $("#modal-1").attr("checked",true);
                 
-                positiveImage.attr("src", response.data.images.original.url);
+                $("#new-modal").attr("src", response.data.images.original.url);
                 console.log(response.data.url);
-    
-                gifDiv.prepend(positiveImage);
-    
-                $("#gifs-go-here").prepend(gifDiv);
-
-            //}
 
         });
 
