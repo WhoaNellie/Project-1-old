@@ -166,6 +166,7 @@ $(document).ready(function () {
     
                 let queryURL = "https://api.giphy.com/v1/gifs/random?tag=" +
                     "congrats" + "&api_key=lJvM8CYrpxziVxv5vy11SIH5QRxU7OU8" + "&limit=1";
+
         
                 $.ajax({
                     url: queryURL,
